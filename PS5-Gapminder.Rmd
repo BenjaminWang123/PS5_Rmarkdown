@@ -14,7 +14,7 @@ library(ggplot2)
 ```
 2. Load data. How many rows/columns do we have?
 ```{r, message=FALSE}
-data <- read_delim("../../info201/PS5/gapminder.csv")
+data <- read_delim("../../info201/PS5_Rmarkdown/gapminder.csv")
 nrow(data)
 ncol(data)
 ```    
@@ -27,7 +27,7 @@ It looks not ok.
 ## 2. Descriptive statistics
 
 1. How many countries are there in the dataset? Analyze all three: iso3, iso2 and name.
-```{r, message=FALSE}
+```{r}
 num_iso3 <- data %>% 
   select(iso3) %>% 
   summarize(n_distinct(iso3))
@@ -38,8 +38,9 @@ num_iso2 <- data %>%
 num_iso2
 num_name <- data %>% 
   select(name) %>% 
-  summarize(n_distinct(sum))
+  summarize(n_distinct(name))
 num_name
+
 ```
 2. (a)Find how many names are there for each iso-2 code. Are there any iso-2 codes that
 correspond to more than one name? What are these countries?
@@ -82,23 +83,25 @@ data %>%
 2. Make a plot of total CO2 emissions over time for the U.S, China, and India. Add a few more countries of your choice. Explain what do you see.
 ```{r, message=FALSE}
 data %>% 
-  filter(name == "China" | name == "Angola" | name == "India" | name == "U.S" | name == "Australia") %>% 
-  ggplot(aes(co2,
-                   time,
+  filter(name == "China" | name == "Angola" | name == "India" | name == "United States of America" | name == "Australia") %>% 
+  group_by(time)%>% 
+  ggplot(aes(time,
+                   co2,
                    col=factor(name))) + geom_line() +
   geom_point()
 ```
-All countries shows a rapid increase in CO2 emission.
+U.s shows a decrese trend in co2 emission.China shows a rapid increse trend in co2 emission. 
 3. Now let’s analyze the CO2 emissions per capita (co2_PC). Make a similar plot of the same countries. What does this figure suggest?
 ```{r, message=FALSE}
 data %>% 
   filter(name == "China" | name == "Angola" | name == "India" | name == "United States of America" | name == "Australia") %>% 
-  ggplot(aes(co2_PC,
-                   time,
+  group_by(time) %>% 
+  ggplot(aes(time,
+                   co2_PC,
                    col=factor(name))) + geom_line() +
   geom_point()
 ```
-It shows the general tendency of CO2_PC, but the graph is different than CO2 emmison vs time.
+It shows the general tendency of CO2_PC, but the graph is different than CO2 emmison vs time. U.S has the hightest CO2_PC, but the trend now is decreasing. All countries shows a increase trend in CO2_PC, and then they stared to decrease.
 
 4. Compute average CO2 emissions per capita across the continents (assume region is the same as continent). Comment what do you see.
 Note: just compute averages over countries and ignore the fact that countries are of different size.
